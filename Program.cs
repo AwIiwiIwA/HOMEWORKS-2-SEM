@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using System;
 
-
 public class MyList<T>
 {
     protected List<T> items = new List<T>();
@@ -68,6 +67,7 @@ public class ElementDoesNotExistException : Exception
     {
     }
 }
+
 [TestFixture]
 public class ListTests
 {
@@ -132,7 +132,7 @@ class Program
         myList.Add(1);
         myList.Add(2);
         myList.Add(3);
-        Console.WriteLine(string.Join(", ", myList));  // Вывод: 1, 2, 3
+        Console.WriteLine(string.Join(", ", myList)); 
 
         var uniqueList = new UniqueList<int>();
         uniqueList.Add(1);
