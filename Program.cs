@@ -1,87 +1,93 @@
-﻿using System.Collections.Generic;
 public class Trie
 {
-    private readonly Dictionary<char, Trie> _children = new Dictionary<char, Trie>();
-    private bool _isEndOfWord;
+    private readonly Dictionary<char, Trie> children = new Dictionary<char, Trie>();
+    private bool endOfWord;
+    public int Size { get; private set; }
+
     public bool Add(string element)
     {
         Trie node = this;
         foreach (char c in element)
         {
-            if (!node._children.ContainsKey(c))
+            if (!node.children.ContainsKey(c))
             {
-                node._children.Add(c, new Trie());
+                node.children.Add(c, new Trie());
             }
-            node = node._children[c];
+            node = node.children[c];
         }
-        if (node._isEndOfWord)
+        if (node.endOfWord)
         {
             return false;
         }
-        node._isEndOfWord = true;
+        node.endOfWord = true;
+        node = this;
+        foreach (char c in element)
+        {
+            node.Size++;
+            node = node.children[c];
+        }
         return true;
     }
+
     public bool Contains(string element)
     {
         Trie node = this;
         foreach (char c in element)
         {
-            if (!node._children.ContainsKey(c))
+            if (!node.children.ContainsKey(c))
             {
                 return false;
             }
-            node = node._children[c];
+            node = node.children[c];
         }
-        return node._isEndOfWord;
+        return node.endOfWord;
     }
+
     public bool Remove(string element)
     {
         Trie node = this;
         var stack = new Stack<(char, Trie)>();
         foreach (char c in element)
         {
-            if (!node._children.ContainsKey(c))
+            if (!node.children.ContainsKey(c))
             {
                 return false;
             }
             stack.Push((c, node));
-            node = node._children[c];
+            node = node.children[c];
         }
-        if (!node._isEndOfWord)
+        if (!node.endOfWord)
         {
             return false;
         }
-        node._isEndOfWord = false;
-        while (node != this && !node._isEndOfWord && node._children.Count == 0)
+        node.endOfWord = false;
+        node = this;
+        foreach (char c in element)
+        {
+            node.Size--;
+            node = node.children[c];
+        }
+        while (node != this && !node.endOfWord && node.children.Count == 0)
         {
             (char c, Trie parent) = stack.Pop();
-            parent._children.Remove(c);
+            parent.children.Remove(c);
             node = parent;
         }
         return true;
     }
+
     public int HowManyStartsWithPrefix(string prefix)
     {
         Trie node = this;
         foreach (char c in prefix)
         {
-            if (!node._children.ContainsKey(c))
+            if (!node.children.ContainsKey(c))
             {
                 return 0;
             }
-            node = node._children[c];
+            node = node.children[c];
         }
-        return CountWords(node);
-    }
-    public int Size { get; private set; }
-    private int CountWords(Trie node)
-    {
-        int count = node._isEndOfWord ? 1 : 0;
-        foreach (Trie child in node._children.Values)
-        {
-            count += CountWords(child);
-        }
-        return count;
+        return node.Size;
     }
 }
 class Program
