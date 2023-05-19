@@ -58,7 +58,6 @@ public class PriorityQueueTests
         Assert.AreEqual("World", queue.Dequeue());
         Assert.IsTrue(queue.Empty);
     }
-
     [Test]
     public void TestPriorityQueue_ThrowsException_OnDequeueEmpty()
     {
@@ -70,7 +69,6 @@ public class PriorityQueueTests
 //Добавил мейн для моментальной проверки тестами =))
 public class Program
 {
-    
     public static void Main(string[] args)
     {
         //При добавлении элементов с приоритетами 2, 1 и 3, они будут упорядочены как 1, 2, 3.
@@ -88,8 +86,6 @@ public class Program
             Console.WriteLine(value);
         }
         Console.WriteLine("\nQueue is empty.");
-
         Assert.IsTrue(queue.Empty);
     }
-
 }
